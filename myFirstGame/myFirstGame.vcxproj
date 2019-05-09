@@ -169,6 +169,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Tile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

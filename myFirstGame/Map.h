@@ -9,7 +9,7 @@ public:
 	Map();
 	~Map();
 
-	void LoadMap(int arr[20][25]);
+	void LoadMap(int arr[20][32]);
 	void DrawMap();
 
 
