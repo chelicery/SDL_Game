@@ -52,7 +52,9 @@ void GameObject::UpdatePlayer1()
 			jump = false;
 			
 		}
-	}
+
+	} 
+
 	
 	
 	   	  

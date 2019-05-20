@@ -85,7 +85,6 @@ void Game::update()
 	player->UpdatePlayer1();
 	enemy->UpdatePlayer2();
 
-	//map->LoadMap();
 }
 void Game::clean()
 {

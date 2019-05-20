@@ -11,7 +11,7 @@ public:
 	 double SpeedIncrease();
 	 double SpeedDecrease();
 	 double Gravity();
-	
+	 bool checkColision(SDL_Rect);
 
 
 private:

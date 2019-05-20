@@ -162,6 +162,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
