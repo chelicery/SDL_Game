@@ -12,15 +12,16 @@ int main(int argc, char* argv[])
 	int frameTime;
 
 
-
+	
 
 	game = new Game();
-	game->init("my game", 800, 640, false);
+	game->init("my game", 1280, 640, false);
+	SDL_ShowCursor(0);
 	while (game->running())
 	{
 		frameStart = SDL_GetTicks();
 		
-
+		
 		game->handleEvents();
 		game->update();
 		game->render();

@@ -1,10 +1,13 @@
 #include "GameObject.h"
 #include "TextureManager.h"
 #include "Physics.h"
-
+#include "Map.h"
+#include <vector>
 
 //double* velocity;
 Physics* physics;
+std::vector <SDL_Rect> colls;
+int elo;
 
 
 GameObject::GameObject(const char* texturesheet, double x, double y)
@@ -14,38 +17,46 @@ GameObject::GameObject(const char* texturesheet, double x, double y)
 	xpos = x;
 	xpos = y;
 	physics = new Physics;
+	
 
 }
 
 void GameObject::UpdatePlayer1()
 {
+	double x, y;
 	
-
+	x = xpos;
+	y = ypos;
 
 	speed = physics->SpeedIncrease();
+	elo = physics->CheckCollision(destRect, kol);
 
 	auto kstate = SDL_GetKeyboardState(NULL);
 	if (jump == false) {
+		
 		if (kstate[SDL_SCANCODE_LEFT])
 			xpos -= (1.0 + speed );
-		if (kstate[SDL_SCANCODE_RIGHT])
+		if (kstate[SDL_SCANCODE_RIGHT] && !elo)
 			xpos += (1.0 + speed );
-		if (kstate[SDL_SCANCODE_UP]) {
+		if (kstate[SDL_SCANCODE_UP] && !elo) {
+
 			jump = true;
 			yposBeforeJump = ypos;
-			ypos -= (45.0 + speed);				
+			ypos -= (44.0 );
 		}
 		if (kstate[SDL_SCANCODE_RCTRL])
 			speed = physics->SpeedDecrease();
-		if (kstate[SDL_SCANCODE_DOWN])
-			ypos += (1.0 + speed);
+		if (kstate[SDL_SCANCODE_DOWN] && !elo ) {
+			ypos += 1.0 ;
+		
+		} 
 
 	} else if (jump)
 	{
-		ypos += 2.0;
-		if (kstate[SDL_SCANCODE_LEFT])
+		ypos += 1.0;
+		if (kstate[SDL_SCANCODE_LEFT] && !elo)
 			xpos -= (1.0 + speed * 1.4);
-		if (kstate[SDL_SCANCODE_RIGHT])
+		if (kstate[SDL_SCANCODE_RIGHT] && !elo)
 			xpos += (1.0 + speed * 1.4);
 		
 		if (ypos >= yposBeforeJump) {
@@ -53,22 +64,67 @@ void GameObject::UpdatePlayer1()
 			
 		}
 
-	} 
+	}
+	
+	collider.x = xpos;
+	collider.y = ypos;
+	collider.h = 32;
+	collider.w = 32;
 
+	/*
+	for (auto& i : map->colliders)
+	{
 	
-	
-	   	  
+
+		elo = physics->CheckCollision(destRect, i.get_box() );
+		if (elo)
+		{
+			return;
+		}
+	}
+	*/
+	if(elo)
+	{
+		
+		destRect.x = x;
+		destRect.y = y;
+	} else
+	{
+		destRect.x = xpos;
+		destRect.y = ypos;
+	}
+
 	srcRect.h = 32;
 	srcRect.w = 32; 
 	srcRect.x = 0;
 	srcRect.y = 0;
 	
-	destRect.x = xpos;
-	destRect.y = ypos;
+
 	destRect.w = srcRect.w * 2;
 	destRect.h = srcRect.h * 2;
 
 	
+	kol.x = 640;
+	kol.y = 320;
+	kol.h = 32;
+	kol.w = 32;
+
+	kol2.x = 608;
+	kol2.y = 298;
+	kol2.w = 32;
+	kol2.h = 32;
+	
+	//std::cout << "x pos: " << destRect.x << "  ypos = " << destRect.y << std::endl;
+	
+	
+		
+		
+	
+
+	
+
+
+	destRect = physics->keepInFrames(destRect, xpos, ypos);
 }
 
 void GameObject::UpdatePlayer2()
@@ -93,16 +149,14 @@ void GameObject::UpdatePlayer2()
 
 
 
-
 	srcRect.h = 16;
 	srcRect.w = 16;
 	srcRect.x = 0;
 	srcRect.y = 0;
 
-	destRect.x = xpos;
-	destRect.y = ypos;
-	destRect.w = srcRect.w * 4;
-	destRect.h = srcRect.h * 4;
+
+	destRect.w = srcRect.w * 2;
+	destRect.h = srcRect.h * 2;
 
 
 }
@@ -112,6 +166,8 @@ void GameObject::Render()
 
 
 }
+
+
 
 
 

@@ -1,19 +1,16 @@
 #include "Tile.h"
 
-Tile::Tile(int x, int y, int tileType)
+Tile::Tile(int x, int y)
 {
 	box.x = x;
 	box.y = y;
-
 	box.w = TILE_WIDTH;
 	box.h = TILE_HEIGHT;
-
-	type = tileType;
-
 }
 
-void Tile::show()
+SDL_Rect Tile::get_box()
 {
-	//apply_surface(box.x, box.y, tileSheet, screen, &clips[type ]);
-
+	return box;
 }
+
+

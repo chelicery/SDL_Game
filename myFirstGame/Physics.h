@@ -11,8 +11,8 @@ public:
 	 double SpeedIncrease();
 	 double SpeedDecrease();
 	 double Gravity();
-	 bool checkColision(SDL_Rect);
-
+	 bool CheckCollision(SDL_Rect a , SDL_Rect b);
+	 SDL_Rect keepInFrames(SDL_Rect obj, double xpos, double ypos);
 
 private:
 	double multiplier = 1.2;

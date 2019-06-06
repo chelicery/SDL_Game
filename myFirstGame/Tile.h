@@ -1,29 +1,19 @@
 #pragma once
 #include <SDL.h>
-const int TILE_WIDTH = 64; 
-const int TILE_HEIGHT = 64; 
-const int TOTAL_TILES = 192; 
-const int TILE_SPRITES = 3; //The different tile sprites 
-const int TILE_GRASS = 0; 
-const int TILE_DIRT = 1; 
-const int TILE_SKY = 2; 
+
 
 class Tile
 {
-	Tile();
+	Tile(int posX, int posY);
 	~Tile();
-
-private:
-	SDL_Rect box;
-
-	int type;
+	
+	
 
 public:
-	Tile(int x, int y, int tileType);
+	const int TILE_WIDTH = 32;
+	const int TILE_HEIGHT = 32;
 
-	void show();
 
-	int get_type();
 	SDL_Rect get_box();
-
+	SDL_Rect box;
 };
