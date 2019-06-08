@@ -67,10 +67,17 @@ void Map::DrawMap()
 		for (int col = 0; col < 40; col++)
 		{
 			type = map[row][col];
-
+			
 			dest.x = col * 32;;
 			dest.y = row * 32;
-		
+			if(counter == 0 && type == 1)
+			{
+				SDL_Rect collider;
+				collider.x = dest.x;
+				collider.y = dest.y;
+				collider.h = collider.w = 32;
+				colliders.push_back(collider);
+			}
 			switch (type)
 			{
 			case 0:
@@ -95,5 +102,9 @@ void Map::DrawMap()
 	counter = 1;
 }
 
+std::vector<SDL_Rect> Map::getColliders()
+{
+	return this->colliders;
+}
 
 
