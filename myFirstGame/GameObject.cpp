@@ -6,7 +6,7 @@
 
 //double* velocity;
 Physics* physics;
-std::vector <SDL_Rect> colls;
+
 int elo;
 
 
@@ -32,7 +32,7 @@ void GameObject::UpdatePlayer1()
 	elo = physics->CheckCollision(destRect, kol);
 
 	auto kstate = SDL_GetKeyboardState(NULL);
-	if (jump == false) {
+	if (jump == false && !elo) {
 		
 		if (kstate[SDL_SCANCODE_LEFT])
 			xpos -= (1.0 + speed );
@@ -71,18 +71,17 @@ void GameObject::UpdatePlayer1()
 	collider.h = 32;
 	collider.w = 32;
 
-	/*
-	for (auto& i : map->colliders)
+	for (auto& i : collidingRects)
 	{
 	
 
-		elo = physics->CheckCollision(destRect, i.get_box() );
+		elo = physics->CheckCollision(collider, i);
 		if (elo)
 		{
 			return;
 		}
 	}
-	*/
+	
 	if(elo)
 	{
 		
@@ -167,6 +166,10 @@ void GameObject::Render()
 
 }
 
+void GameObject::setCollidingRects(std::vector<SDL_Rect> vector)
+{
+	this->collidingRects = vector;
+}
 
 
 

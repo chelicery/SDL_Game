@@ -36,7 +36,7 @@ Physics::~Physics()
 	 topB = b.y;
 	 bottomB = b.y + b.h;
 	 //std::cout << "bottom A " << bottomA << "top b" << topB<< std::endl;
-	 if ((bottomA < topB) && (rightA >= leftB) && (leftA <= rightB) )
+	 if ((bottomA >= topB) && (rightA >= leftB) && (leftA <= rightB) )
 	 {
 		 std::cout << "collision from bottom " << bottomA << "top b" << topB << std::endl;
 		// std::cout << "collision 1 " << std::endl;

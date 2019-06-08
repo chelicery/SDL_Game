@@ -12,7 +12,7 @@ public:
 	void UpdatePlayer1();
 	void UpdatePlayer2();
 	void Render();
-	
+	void setCollidingRects(std::vector<SDL_Rect> vector);
 
 
 
@@ -28,7 +28,7 @@ private:
 
 	SDL_Renderer* renderer;
 	
-
+	std::vector <SDL_Rect> collidingRects;
 
 
 };
