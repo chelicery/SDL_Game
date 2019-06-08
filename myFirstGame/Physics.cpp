@@ -35,24 +35,22 @@ Physics::~Physics()
 	 rightB = b.x + b.w;
 	 topB = b.y - 30;
 	 bottomB = b.y + b.h;
-	 //std::cout << "bototom a : " << bottomA << "  topb = " << topB << std::endl;
-	 //std::cout << "bottom A " << bottomA << "top b" << topB<< std::endl;
-	 if ((bottomA >= topB) && (rightA >= leftB) && (leftA <= rightB) )
-	 {
-		 //std::cout << "collision from bottom " << bottomA << "top b" << topB << std::endl;
-		// std::cout << "collision 1 " << std::endl;
-		 return true;
-	 }
-	
-	//if(((topA >= bottomB) && (bottomA <=topB)) && ((rightA >=leftB) || (leftA <= rightB)))
-	//{
-	//	std::cout << "collitinio from top " << bottomA << "top b" << topB << std::endl;
-		// std::cout << "collision 1 " << std::endl;
-	//	return true;
-	//}
 
+	 // Check edges
+	 if (leftA > rightB)// Left 1 is right of right 2
+		 return false; // No collision
 
-	 return false;
+	 if (rightA < leftB) // Right 1 is left of left 2
+		 return false; // No collision
+
+	 if (topA > bottomB) // Top 1 is below bottom 2
+		 return false; // No collision
+
+	 if (bottomA < topB) // Bottom 1 is above top 2 
+		 return false; // No collision
+
+	 return true;
+	 return true;
  }
 
  double Physics::SpeedIncrease()
@@ -81,7 +79,7 @@ double Gravity()
 SDL_Rect Physics::keepInFrames(SDL_Rect obj, double xpos, double ypos)
 {
 	
-	if ((obj.x < 0) || (obj.x + 32 > 1240) )
+	if (obj.x < 0 )
 	{
 		obj.x = xpos = 0;
 		SpeedDecrease();

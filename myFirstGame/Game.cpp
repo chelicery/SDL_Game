@@ -84,6 +84,7 @@ void Game::update()
 {
 	player->UpdatePlayer1();
 	enemy->UpdateEnemy();
+	player->collideEnemy(player->getObjRect(), enemy->getObjRect());
 	player->setCollidingRects(map->getColliders());
 }
 void Game::clean()

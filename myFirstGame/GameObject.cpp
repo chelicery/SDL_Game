@@ -3,11 +3,10 @@
 #include "Physics.h"
 #include "Map.h"
 #include <vector>
-
+int xOld, yOld;
+bool elo;
 //double* velocity;
 Physics* physics;
-double xOld, yOld;
-int elo;
 
 
 GameObject::GameObject(const char* texturesheet, int x, int y)
@@ -33,13 +32,11 @@ void GameObject::UpdatePlayer1()
 
 		auto kstate = SDL_GetKeyboardState(NULL);
 		if (jump == false) {
-
-			if (kstate[SDL_SCANCODE_LEFT])
+		if (kstate[SDL_SCANCODE_LEFT])
 				xpos -= (1.0 + speed);
 			if (kstate[SDL_SCANCODE_RIGHT] /*&& !elo*/)
 				xpos += (1.0 + speed);
 			if (kstate[SDL_SCANCODE_UP] /*&& !elo*/) {
-
 				jump = true;
 				yposBeforeJump = ypos;
 				ypos -= (44.0) + speed;
@@ -54,7 +51,7 @@ void GameObject::UpdatePlayer1()
 		}
 		else if (jump)
 		{
-
+			
 			if (kstate[SDL_SCANCODE_LEFT] && !elo)
 				xpos -= (1.0 + speed * 1.4);
 			if (kstate[SDL_SCANCODE_RIGHT] && !elo)
@@ -62,23 +59,42 @@ void GameObject::UpdatePlayer1()
 
 			if (ypos >= yposBeforeJump) {
 				jump = false;
-
+				if(ypos>yposBeforeJump)
+				{
+					ypos = yposBeforeJump;
+				}
 			}
 			else
 				ypos += 1.0;
 
 		}
 
-		collider.x = xOld;
-		collider.y = yOld;
+		collider.x = xpos;
+		collider.y = ypos;
 		collider.h = 32;
 		collider.w = 32;
 
 		for (auto& i : collidingRects)
 		{
+			//X
+			if (collider.x + collider.w + speed > i.x &&
+				collider.x + speed < i.x + i.w &&
+				collider.y + collider.h > i.y &&
+				collider.y < i.y + i.h) {
 
+				elo = true;
+			}
 
-			elo = physics->CheckCollision(collider, i);
+			// Y 
+			if (collider.y + collider.w > i.x &&
+				collider.x < i.x + i.w &&
+				collider.y + collider.h + collider.y > i.y &&
+				collider.y + speed < i.y + i.h) {
+
+				elo = true;
+			}
+
+			
 			if (elo)
 			{
 				break;
@@ -103,10 +119,10 @@ void GameObject::UpdatePlayer1()
 		srcRect.y = 0;
 
 
-		destRect.w = srcRect.w * 2;
-		destRect.h = srcRect.h * 2;
+		destRect.w = srcRect.w ;
+		destRect.h = srcRect.h;
 
-
+		std::cout << "destRect w " << destRect.w << std::endl;
 
 
 
@@ -176,11 +192,20 @@ void GameObject::setCollidingRects(std::vector<SDL_Rect> vector)
 bool GameObject::isAlive()
 {
 	return alive;
-};
+}
 
 SDL_Rect GameObject::getObjRect()
 {
 	return this->objRect;
 }
 
+bool GameObject::collideEnemy(SDL_Rect player, SDL_Rect enemy)
+{
 
+	if( physics->CheckCollision(player, enemy))
+	{
+		alive = false;
+		return true;
+	}
+	
+}

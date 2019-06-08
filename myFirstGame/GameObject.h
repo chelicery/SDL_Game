@@ -2,6 +2,7 @@
 #include "Game.h"
 #include <vector>
 #include "Map.h"
+#include "Physics.h"
 
 class GameObject
 {
@@ -9,6 +10,7 @@ class GameObject
 public:
 	GameObject(const char* textureshee, int x, int y);
 	~GameObject();
+
 	void UpdatePlayer1();
 	void UpdateEnemy();
 	void Render();
@@ -17,6 +19,7 @@ public:
 	int counter;
 	SDL_Rect getObjRect();
 	void killHim(GameObject player);
+	bool collideEnemy(SDL_Rect player, SDL_Rect);
 
 
 private:
