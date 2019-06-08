@@ -39,8 +39,8 @@ void Game::init(const char *title, int width, int height, bool fullscreen)
 		isRunning = true;
 
 
-		player = new GameObject("assets/player1.png",0,0);
-		enemy = new GameObject("assets/enemy.png", 100, 100);
+		player = new GameObject("assets/player1.png",440,220);
+		enemy = new GameObject("assets/enemy.png", 208, 258);
 		map = new Map();
 		
 
@@ -83,7 +83,7 @@ void Game::render()
 void Game::update()
 {
 	player->UpdatePlayer1();
-	enemy->UpdatePlayer2();
+	enemy->UpdateEnemy();
 	player->setCollidingRects(map->getColliders());
 }
 void Game::clean()

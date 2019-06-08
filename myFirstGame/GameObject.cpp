@@ -6,16 +6,16 @@
 
 //double* velocity;
 Physics* physics;
-
+double xOld, yOld;
 int elo;
 
 
-GameObject::GameObject(const char* texturesheet, double x, double y)
+GameObject::GameObject(const char* texturesheet, int x, int y)
 {
 
 	objTexture = TextureManager::LoadTexture(texturesheet);
 	xpos = x;
-	xpos = y;
+	ypos = y;
 	physics = new Physics;
 	
 
@@ -23,140 +23,140 @@ GameObject::GameObject(const char* texturesheet, double x, double y)
 
 void GameObject::UpdatePlayer1()
 {
-	double x, y;
-	
-	x = xpos;
-	y = ypos;
+	if (alive) {
 
-	speed = physics->SpeedIncrease();
-	elo = physics->CheckCollision(destRect, kol);
+		xOld = xpos;
+		yOld = ypos;
 
-	auto kstate = SDL_GetKeyboardState(NULL);
-	if (jump == false && !elo) {
-		
-		if (kstate[SDL_SCANCODE_LEFT])
-			xpos -= (1.0 + speed );
-		if (kstate[SDL_SCANCODE_RIGHT] && !elo)
-			xpos += (1.0 + speed );
-		if (kstate[SDL_SCANCODE_UP] && !elo) {
+		speed = physics->SpeedIncrease();
+		//elo = physics->CheckCollision(destRect, kol);
 
-			jump = true;
-			yposBeforeJump = ypos;
-			ypos -= (44.0 );
+		auto kstate = SDL_GetKeyboardState(NULL);
+		if (jump == false) {
+
+			if (kstate[SDL_SCANCODE_LEFT])
+				xpos -= (1.0 + speed);
+			if (kstate[SDL_SCANCODE_RIGHT] /*&& !elo*/)
+				xpos += (1.0 + speed);
+			if (kstate[SDL_SCANCODE_UP] /*&& !elo*/) {
+
+				jump = true;
+				yposBeforeJump = ypos;
+				ypos -= (44.0) + speed;
+			}
+			if (kstate[SDL_SCANCODE_RCTRL])
+				speed = physics->SpeedDecrease();
+			if (kstate[SDL_SCANCODE_DOWN] && !elo) {
+				ypos += 1.0;
+
+			}
+
 		}
-		if (kstate[SDL_SCANCODE_RCTRL])
-			speed = physics->SpeedDecrease();
-		if (kstate[SDL_SCANCODE_DOWN] && !elo ) {
-			ypos += 1.0 ;
-		
-		} 
+		else if (jump)
+		{
 
-	} else if (jump)
-	{
-		ypos += 1.0;
-		if (kstate[SDL_SCANCODE_LEFT] && !elo)
-			xpos -= (1.0 + speed * 1.4);
-		if (kstate[SDL_SCANCODE_RIGHT] && !elo)
-			xpos += (1.0 + speed * 1.4);
-		
-		if (ypos >= yposBeforeJump) {
-			jump = false;
-			
+			if (kstate[SDL_SCANCODE_LEFT] && !elo)
+				xpos -= (1.0 + speed * 1.4);
+			if (kstate[SDL_SCANCODE_RIGHT] && !elo)
+				xpos += (1.0 + speed * 1.4);
+
+			if (ypos >= yposBeforeJump) {
+				jump = false;
+
+			}
+			else
+				ypos += 1.0;
+
 		}
 
-	}
-	
-	collider.x = xpos;
-	collider.y = ypos;
-	collider.h = 32;
-	collider.w = 32;
+		collider.x = xOld;
+		collider.y = yOld;
+		collider.h = 32;
+		collider.w = 32;
 
-	for (auto& i : collidingRects)
-	{
-	
+		for (auto& i : collidingRects)
+		{
 
-		elo = physics->CheckCollision(collider, i);
+
+			elo = physics->CheckCollision(collider, i);
+			if (elo)
+			{
+				break;
+			}
+		}
+
 		if (elo)
 		{
-			return;
+			///speed = 0;
+			destRect.x = xOld;
+			destRect.y = yOld;
 		}
+		else
+		{
+			destRect.x = xpos;
+			destRect.y = ypos;
+		}
+
+		srcRect.h = 32;
+		srcRect.w = 32;
+		srcRect.x = 0;
+		srcRect.y = 0;
+
+
+		destRect.w = srcRect.w * 2;
+		destRect.h = srcRect.h * 2;
+
+
+
+
+
+
+
+
+
+
+
+
+
+		destRect = physics->keepInFrames(destRect, xpos, ypos);
 	}
-	
-	if(elo)
-	{
-		
-		destRect.x = x;
-		destRect.y = y;
-	} else
-	{
-		destRect.x = xpos;
-		destRect.y = ypos;
-	}
-
-	srcRect.h = 32;
-	srcRect.w = 32; 
-	srcRect.x = 0;
-	srcRect.y = 0;
-	
-
-	destRect.w = srcRect.w * 2;
-	destRect.h = srcRect.h * 2;
-
-	
-	kol.x = 640;
-	kol.y = 320;
-	kol.h = 32;
-	kol.w = 32;
-
-	kol2.x = 608;
-	kol2.y = 298;
-	kol2.w = 32;
-	kol2.h = 32;
-	
-	//std::cout << "x pos: " << destRect.x << "  ypos = " << destRect.y << std::endl;
-	
-	
-		
-		
-	
-
-	
-
-
-	destRect = physics->keepInFrames(destRect, xpos, ypos);
 }
 
-void GameObject::UpdatePlayer2()
+void GameObject::UpdateEnemy()
 {
+	 
 
-
-
-	speed = physics->SpeedIncrease();
-	auto kstate = SDL_GetKeyboardState(NULL);
-	if (kstate[SDL_SCANCODE_A])
-		xpos -= (1.0 + speed);
-	if (kstate[SDL_SCANCODE_D])
-		xpos += (1.0 + speed);
-	if (kstate[SDL_SCANCODE_W])
-		ypos -= (1.0 + speed);
-	if (kstate[SDL_SCANCODE_S])
-		ypos += (1.0 + speed);
-	if (kstate[SDL_SCANCODE_LCTRL]) {
-		speed = physics->SpeedDecrease();
-
+	if (counter <= 40)
+	{
+		xpos++;
+		counter++;
+	}
+	if (counter >= 40)
+	{
+		xpos--;
+		counter++;
 	}
 
+	if(counter == 80)
+	{
+		counter = 0;
+	}
 
+		
 
-	srcRect.h = 16;
-	srcRect.w = 16;
+	srcRect.h = 32;
+	srcRect.w = 32;
 	srcRect.x = 0;
 	srcRect.y = 0;
 
-
-	destRect.w = srcRect.w * 2;
-	destRect.h = srcRect.h * 2;
-
+	
+	destRect.x =  objRect.x = xpos;
+	destRect.y  = objRect.y = ypos;
+	destRect.w  = objRect.w = 32;
+	destRect.h =  objRect.h = 32;
+	//std::cout << "objrect.x: " << objRect.x << " rect y = " << objRect.y << std::endl;
+	
+	collidingRects.push_back(getObjRect());
 
 }
 void GameObject::Render()
@@ -173,5 +173,14 @@ void GameObject::setCollidingRects(std::vector<SDL_Rect> vector)
 
 
 
+bool GameObject::isAlive()
+{
+	return alive;
+};
+
+SDL_Rect GameObject::getObjRect()
+{
+	return this->objRect;
+}
 
 

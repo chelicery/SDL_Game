@@ -28,21 +28,22 @@ Physics::~Physics()
 	 leftA = a.x;
 	 rightA = a.x + a.w;
 	 topA = a.y;
-	 bottomA = a.y + a.h;
+	 bottomA = a.y + a.h ;
 
 
 	 leftB = b.x;
 	 rightB = b.x + b.w;
-	 topB = b.y;
+	 topB = b.y - 30;
 	 bottomB = b.y + b.h;
+	 //std::cout << "bototom a : " << bottomA << "  topb = " << topB << std::endl;
 	 //std::cout << "bottom A " << bottomA << "top b" << topB<< std::endl;
 	 if ((bottomA >= topB) && (rightA >= leftB) && (leftA <= rightB) )
 	 {
-		 std::cout << "collision from bottom " << bottomA << "top b" << topB << std::endl;
+		 //std::cout << "collision from bottom " << bottomA << "top b" << topB << std::endl;
 		// std::cout << "collision 1 " << std::endl;
 		 return true;
 	 }
-
+	
 	//if(((topA >= bottomB) && (bottomA <=topB)) && ((rightA >=leftB) || (leftA <= rightB)))
 	//{
 	//	std::cout << "collitinio from top " << bottomA << "top b" << topB << std::endl;
@@ -84,7 +85,7 @@ SDL_Rect Physics::keepInFrames(SDL_Rect obj, double xpos, double ypos)
 	{
 		obj.x = xpos = 0;
 		SpeedDecrease();
-		std::cout << "keep" << std::endl;
+		//std::cout << "keep" << std::endl;
 	}
 
 	return obj;
